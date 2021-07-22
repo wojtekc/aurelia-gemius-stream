@@ -43,7 +43,6 @@ export class AureliaGemiusStream {
         this.eventAggregator.subscribe('stats:event', payload => {
             this.handleEvent(payload);
         });
-        this.attachPageTracker();
     }
 
     log(level, message) {
