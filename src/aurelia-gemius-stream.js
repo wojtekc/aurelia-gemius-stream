@@ -2,7 +2,7 @@ import { inject } from 'aurelia-dependency-injection';
 import { LogManager } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
 
-logger = LogManager.getLogger('gemius-stream-plugin');
+const logger = LogManager.getLogger('gemius-stream-plugin');
 
 @inject(EventAggregator)
 export class AureliaGemiusStream {
@@ -79,15 +79,15 @@ export class AureliaGemiusStream {
 
         if (this.currentPlaylistItem.type === 'program') {
             if (payload.eventName === 'play') {
-                this.gemiusPlayer.programEvent(this.program.id, offset, payload.eventName, { autoPlay: payload.autoPlay });
+                programEvent(this.program.id, offset, payload.eventName, { autoPlay: payload.autoPlay });
             } else {
-                this.gemiusPlayer.programEvent(this.program.id, offset, payload.eventName);
+                programEvent(this.program.id, offset, payload.eventName);
             }
         } else {
             if (payload.eventName === 'play') {
-                this.gemiusPlayer.adEvent(this.program.id, this.currentPlaylistItem.id, offset, payload.eventName, { autoPlay: payload.autoPlay });
+                adEvent(this.program.id, this.currentPlaylistItem.id, offset, payload.eventName, { autoPlay: payload.autoPlay });
             } else {
-                this.gemiusPlayer.adEvent(this.program.id, this.currentPlaylistItem.id, offset, payload.eventName);
+                adEvent(this.program.id, this.currentPlaylistItem.id, offset, payload.eventName);
             }
         }
     }
