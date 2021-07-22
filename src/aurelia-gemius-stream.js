@@ -2,11 +2,12 @@ import { inject } from 'aurelia-dependency-injection';
 import { LogManager } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
 
+logger = LogManager.getLogger('gemius-stream-plugin');
+
 @inject(EventAggregator)
 export class AureliaGemiusStream {
     constructor(eventAggregator) {
         this.eventAggregator = eventAggregator;
-        this.logger = LogManager.getLogger('gemius-stream-plugin');
         this.initialized = false;
 
     }
@@ -49,7 +50,7 @@ export class AureliaGemiusStream {
         if (!this.debug) {
             return;
         }
-        this.logger[level](message);
+        logger[level](message);
     }
 
     loadScript() {
