@@ -28,7 +28,7 @@ export class AureliaGemiusStream {
             throw new Error(errorMessage);
         }
         this.options = options;
-        this.gemiusPlayer = new GemiusPlayer(1, this.identifier, { resolution: '1920x1080'});
+        this.gemiusPlayer = new window.GemiusPlayer(1, this.identifier, { resolution: '1920x1080'});
         this.eventAggregator.subscribe('stats:init', ({ program, playlist }) => {
             this.logger.debug('AureliaGemiusStream.init', program, playlist);
             this.program = program;
@@ -71,15 +71,15 @@ export class AureliaGemiusStream {
 
         if (this.currentPlaylistItem.type === 'program') {
             if (payload.eventName === 'play') {
-                programEvent(this.program.id, offset, payload.eventName, { autoPlay: payload.autoPlay });
+                this.gemiusPlayer.programEvent(this.program.id, offset, payload.eventName, { autoPlay: payload.autoPlay });
             } else {
-                programEvent(this.program.id, offset, payload.eventName);
+                this.gemiusPlayer.programEvent(this.program.id, offset, payload.eventName);
             }
         } else {
             if (payload.eventName === 'play') {
-                adEvent(this.program.id, this.currentPlaylistItem.id, offset, payload.eventName, { autoPlay: payload.autoPlay });
+                this.gemiusPlayer.adEvent(this.program.id, this.currentPlaylistItem.id, offset, payload.eventName, { autoPlay: payload.autoPlay });
             } else {
-                adEvent(this.program.id, this.currentPlaylistItem.id, offset, payload.eventName);
+                this.gemiusPlayer.adEvent(this.program.id, this.currentPlaylistItem.id, offset, payload.eventName);
             }
         }
     }
