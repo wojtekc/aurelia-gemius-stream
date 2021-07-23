@@ -2,13 +2,13 @@ import { inject } from 'aurelia-dependency-injection';
 import { LogManager } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
 
-const logger = LogManager.getLogger('gemius-stream-plugin');
 
 @inject(EventAggregator)
 export class AureliaGemiusStream {
     constructor(eventAggregator) {
         this.eventAggregator = eventAggregator;
         this.initialized = false;
+	this.logger = LogManager.getLogger('gemius-stream-plugin');
 
     }
 
@@ -22,16 +22,15 @@ export class AureliaGemiusStream {
     }
 
     attach(options = { getExtra: () => { } }) {
-        this.log('debug', 'attach');
         if (!this.initialized) {
             const errorMessage = 'AureliaGemiusStream must be initialized before use.';
-            this.log('error', errorMessage);
+            this.logger.error(errorMessage);
             throw new Error(errorMessage);
         }
         this.options = options;
         this.gemiusPlayer = new GemiusPlayer(1, this.identifier, { resolution: '1920x1080'});
         this.eventAggregator.subscribe('stats:init', ({ program, playlist }) => {
-            logger.debug('AureliaGemiusStream.init', program, playlist);
+            this.logger.debug('AureliaGemiusStream.init', program, playlist);
             this.program = program;
             this.playlist = playlist;
             this.currentPlaylistItem = null;
@@ -46,15 +45,8 @@ export class AureliaGemiusStream {
         });
     }
 
-    log(level, message) {
-        if (!this.debug) {
-            return;
-        }
-        logger[level](message);
-    }
-
     loadScript() {
-        this.log('debug', 'loadScript');
+        this.logger.debug('loadScript');
         const script = document.createElement('script');
         script.text = 
             "function gemius_player_pending(obj,fun) {obj[fun] = obj[fun] || function() {var x = window['gemius_player_data'] ="
@@ -74,7 +66,7 @@ export class AureliaGemiusStream {
     }
 
     handleEvent(payload) {
-        logger.debug('GemiusStreamService.handleEvent', payload);
+        this.logger.debug('GemiusStreamService.handleEvent', payload);
         const offset = (payload.offset) ? Math.round(payload.offset) : 0;
 
         if (this.currentPlaylistItem.type === 'program') {
